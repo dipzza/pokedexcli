@@ -14,7 +14,7 @@ func TestCleanInput(t *testing.T) {
 			expected: []string{"hello", "world"},
 		},
 		{
-			input: "With UpperCase ",
+			input:    "With UpperCase ",
 			expected: []string{"with", "uppercase"},
 		},
 	}
