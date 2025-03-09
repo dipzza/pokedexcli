@@ -4,15 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"time"
-
-	"github.com/dipzza/pokedexcli/internal/pokecache"
 )
-
-const baseURL = "https://pokeapi.co/api/v2/"
-
-const LocationEndpoint = baseURL + "location/"
-const LocationAreaEndpoint = baseURL + "location-area/"
 
 type ResourcePage struct {
 	Count    int    `json:"count"`
@@ -23,8 +15,6 @@ type ResourcePage struct {
 		URL  string `json:"url"`
 	} `json:"results"`
 }
-
-var cache = pokecache.NewCache(time.Second * 5)
 
 func GetResourcePage(endpoint string) (ResourcePage, error) {
 	var resource ResourcePage

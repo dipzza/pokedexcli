@@ -29,7 +29,7 @@ func main() {
 				continue
 			}
 
-			err := command.callback(&locationsConfig)
+			err := command.callback(&locationsConfig, words[1:]...)
 			if err != nil {
 				fmt.Println("Error:", err)
 			}
