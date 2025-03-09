@@ -2,7 +2,11 @@ package pokeapi
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
+	"time"
+
+	"github.com/dipzza/pokedexcli/internal/pokecache"
 )
 
 const baseURL = "https://pokeapi.co/api/v2/"
@@ -20,17 +24,27 @@ type ResourcePage struct {
 	} `json:"results"`
 }
 
+var cache = pokecache.NewCache(time.Second * 5)
+
 func GetResourcePage(endpoint string) (ResourcePage, error) {
 	var resource ResourcePage
-	res, err := http.Get(endpoint)
-	if err != nil {
-		return resource, err
-	}
-	defer res.Body.Close()
 
-	
-	decoder := json.NewDecoder(res.Body)
-	if err := decoder.Decode(&resource); err != nil {
+	entry, found := cache.Get(endpoint)
+	if !found {
+		res, err := http.Get(endpoint)
+		if err != nil {
+			return resource, err
+		}
+		defer res.Body.Close()
+
+		entry, err = io.ReadAll(res.Body)
+		if err != nil {
+			return resource, err
+		}
+		cache.Add(endpoint, entry)
+	}
+
+	if err := json.Unmarshal(entry, &resource); err != nil {
 		return resource, err
 	}
 
