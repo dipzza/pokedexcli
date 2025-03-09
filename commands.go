@@ -23,9 +23,9 @@ var cliCommands map[string]cliCommand
 func init() {
 	cliCommands = map[string]cliCommand{
 		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    commandHelp,
+			name:					"help",
+			description:	"Displays a help message",
+			callback:			commandHelp,
 		},
 		"explore": {
 			name:					"explore <area_name>",
@@ -38,14 +38,14 @@ func init() {
 			callback:			commandMap,
 		},
 		"mapb": {
-			name:        "mapb",
-			description: "Displays the previous 20 locations in the map",
-			callback:    commandMapb,
+			name:					"mapb",
+			description:	"Displays the previous 20 locations in the map",
+			callback:			commandMapb,
 		},
 		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    commandExit,
+			name:					"exit",
+			description:	"Exit the Pokedex",
+			callback:			commandExit,
 		},
 	}
 }

@@ -1,10 +1,6 @@
 package pokeapi
 
-import (
-	"encoding/json"
-	"io"
-	"net/http"
-)
+const LocationAreaEndpoint = "https://pokeapi.co/api/v2/location-area/"
 
 type LocationArea struct {
 	EncounterMethodRates []struct {
@@ -60,27 +56,7 @@ type LocationArea struct {
 }
 
 func GetLocationArea(name string) (LocationArea, error) {
-	var locationArea LocationArea
 	endpoint := LocationAreaEndpoint + name
 
-	entry, found := cache.Get(endpoint)
-	if !found {
-		res, err := http.Get(endpoint)
-		if err != nil {
-			return locationArea, err
-		}
-		defer res.Body.Close()
-
-		entry, err = io.ReadAll(res.Body)
-		if err != nil {
-			return locationArea, err
-		}
-		cache.Add(endpoint, entry)
-	}
-
-	if err := json.Unmarshal(entry, &locationArea); err != nil {
-		return locationArea, err
-	}
-
-	return locationArea, nil
+	return getResource[LocationArea](endpoint)
 }
