@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 
 	"github.com/dipzza/pokedexcli/internal/pokeapi"
@@ -17,6 +18,8 @@ type config struct {
 	nextURL string
 	prevURL string
 }
+
+var pokedex map[string]pokeapi.Pokemon = map[string]pokeapi.Pokemon{}
 
 var cliCommands map[string]cliCommand
 
@@ -41,6 +44,11 @@ func init() {
 			name:					"mapb",
 			description:	"Displays the previous 20 locations in the map",
 			callback:			commandMapb,
+		},
+		"catch": {
+			name:					"catch <pokemon_name>",
+			description:	"Try to catch a pokemon",
+			callback:			commandCatch,
 		},
 		"exit": {
 			name:					"exit",
@@ -121,6 +129,29 @@ func commandMapb(c *config, _ ...string) error {
 		fmt.Println(location.Name)
 	}
 
+	return nil
+}
+
+func commandCatch(c *config, params ...string) error {
+	if len(params) == 0 {
+		fmt.Println("Missing pokemon name. Usage: explore <pokemon_name>")
+	}
+	pokemonName := params[0]
+
+	fmt.Println("Throwing a Pokeball at " + pokemonName + "...")
+	pokemon, err := pokeapi.GetPokemon(pokemonName)
+	if err != nil {
+		return err
+	}
+
+	throwChance := rand.Intn(250)
+	if throwChance >= pokemon.BaseExperience {
+		fmt.Println(pokemonName, "was caught!")
+		pokedex[pokemonName] = pokemon
+	} else {
+		fmt.Println(pokemonName, "escaped!")
+	}
+	
 	return nil
 }
 
