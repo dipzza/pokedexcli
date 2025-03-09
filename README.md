@@ -2,7 +2,7 @@
 Pokedex is a command-line REPL using PokéAPI
 
 Example: 
-```shell
+```console
 Pokedex > help
 Welcome to the Pokedex!
 Usage:
