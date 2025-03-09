@@ -30,11 +30,6 @@ func init() {
 			description:	"Displays a help message",
 			callback:			commandHelp,
 		},
-		"explore": {
-			name:					"explore <area_name>",
-			description:	"Displays Pokémons in an area",
-			callback:			commandExplore,
-		},
 		"map": {
 			name:					"map",
 			description:	"Displays the next 20 locations in the map",
@@ -45,10 +40,25 @@ func init() {
 			description:	"Displays the previous 20 locations in the map",
 			callback:			commandMapb,
 		},
+		"explore": {
+			name:					"explore <area_name>",
+			description:	"Displays Pokémons in an area",
+			callback:			commandExplore,
+		},
 		"catch": {
 			name:					"catch <pokemon_name>",
 			description:	"Try to catch a pokemon",
 			callback:			commandCatch,
+		},
+		"inspect": {
+			name:					"inspect <pokemon_name>",
+			description:	"Displays pokemon information",
+			callback:			commandInspect,
+		},
+		"pokedex": {
+			name:					"pokedex",
+			description:	"list all popkemon in the Pokedex",
+			callback: 		commandPokedex,
 		},
 		"exit": {
 			name:					"exit",
@@ -135,6 +145,7 @@ func commandMapb(c *config, _ ...string) error {
 func commandCatch(c *config, params ...string) error {
 	if len(params) == 0 {
 		fmt.Println("Missing pokemon name. Usage: explore <pokemon_name>")
+		return nil
 	}
 	pokemonName := params[0]
 
@@ -151,7 +162,46 @@ func commandCatch(c *config, params ...string) error {
 	} else {
 		fmt.Println(pokemonName, "escaped!")
 	}
+
+	return nil
+}
+
+func commandInspect(c *config, params ...string) error {
+	if len(params) == 0 {
+		fmt.Println("Missing pokemon name. Usage: inspect <pokemon_name>")
+		return nil
+	}
+	pokemonName := params[0]
+
+	pokemon, ok := pokedex[pokemonName]
+	if !ok {
+		fmt.Println("that pokemon is not in the Pokedex, try to catch it!")
+	}
 	
+	fmt.Print(
+		"Name: ", pokemonName, "\n",
+		"Height: ", pokemon.Height, "\n",
+		"Weight: ", pokemon.Weight, "\n",
+	)
+
+	fmt.Println("Stats:")
+	for _, stat := range pokemon.Stats {
+		fmt.Println(" -" + stat.Stat.Name + ": " + fmt.Sprint(stat.BaseStat))
+	}
+
+	fmt.Println("Types:")
+	for _, t := range pokemon.Types {
+		fmt.Println(" -", t.Type.Name)
+	}
+
+	return nil
+}
+
+func commandPokedex(c *config, params ...string) error {
+	fmt.Println("Your Pokedex:")
+	for _, val := range pokedex {
+		fmt.Println(" -", val.Name)
+	}
 	return nil
 }
 
