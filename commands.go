@@ -57,7 +57,7 @@ func init() {
 		},
 		"pokedex": {
 			name:					"pokedex",
-			description:	"list all popkemon in the Pokedex",
+			description:	"list all pokemon in the Pokedex",
 			callback: 		commandPokedex,
 		},
 		"exit": {

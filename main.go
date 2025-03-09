@@ -32,6 +32,8 @@ func main() {
 			err := command.callback(&locationsConfig, words[1:]...)
 			if err != nil {
 				fmt.Println("Error:", err)
+			} else {
+				fmt.Println()
 			}
 		}
 	}
